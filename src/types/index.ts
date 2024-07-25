@@ -1,12 +1,10 @@
-export interface Task {
-  userId: number;
-  id: string;
-  title: string;
-  completed: boolean;
-}
+export type Status = 'backlog' | 'doing' | 'development' | 'developed';
 
-export interface ColumnProps {
-  title: string;
-  tasks: Array<Task>;
+export interface TaskProps {
   id: string;
+  date: string;
+  title: string;
+  status: Status;
+  description: string;
+  responsible: Array<string>;
 }
