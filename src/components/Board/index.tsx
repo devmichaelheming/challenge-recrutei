@@ -1,100 +1,102 @@
-import { Task } from '~/types';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { LeftOutlined, LoadingOutlined, RightOutlined } from '@ant-design/icons';
+import LogoRecrutei from '~/assets/images/logo.svg';
+import { Spin } from 'antd';
+import Image from 'next/image';
+import React, { FC, ReactElement } from 'react';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import Column from '../Column';
+import { Form } from './components/Form';
 import S from './styles';
+import { useBoard } from './useBoard';
+
 const Board: FC = (): ReactElement => {
-  const [completed, setCompleted] = useState<Array<Task>>([]);
-  const [incomplete, setIncomplete] = useState<Array<Task>>([]);
-  const [backlog, setBacklog] = useState<Array<Task>>([]);
-  const [inReview, setInReview] = useState<Array<Task>>([]);
-
-  const getItemsForColumn = (columnId: string) => {
-    switch (columnId) {
-      case '1':
-        return incomplete;
-      case '2':
-        return completed;
-      case '3':
-        return inReview;
-      case '4':
-        return backlog;
-      default:
-        return [];
-    }
-  };
-
-  const updateColumnState = (columnId: string, items: Array<Task>) => {
-    switch (columnId) {
-      case '1':
-        setIncomplete(items);
-        break;
-      case '2':
-        setCompleted(items);
-        break;
-      case '3':
-        setInReview(items);
-        break;
-      case '4':
-        setBacklog(items);
-        break;
-    }
-  };
-
-  const handleDragEnd = (result: DropResult) => {
-    const { destination, source } = result;
-
-    if (!destination) return;
-    if (source.droppableId === destination.droppableId && source.index === destination.index)
-      return;
-
-    if (source.droppableId === destination.droppableId) {
-      const columnId = source.droppableId;
-      const items = getItemsForColumn(columnId);
-
-      const [movedItem] = items.splice(source.index, 1);
-      items.splice(destination.index, 0, movedItem);
-
-      updateColumnState(columnId, items);
-    } else {
-      const sourceColumnId = source.droppableId;
-      const destinationColumnId = destination.droppableId;
-
-      const sourceItems = getItemsForColumn(sourceColumnId);
-      const destinationItems = getItemsForColumn(destinationColumnId);
-
-      const [movedItem] = sourceItems.splice(source.index, 1);
-      destinationItems.splice(destination.index, 0, movedItem);
-
-      updateColumnState(sourceColumnId, sourceItems);
-      updateColumnState(destinationColumnId, destinationItems);
-    }
-  };
-
-  // TODO: IMPLEMENTAR FLUXO DE REQUISIÇÕES(CRUD DE TASKS)
-  // OBS: PELO OQUE OBSERVEI, OS DADOS SÃO SALVOS APENAS TODOS DE UMA VEZ SÓ, NÃO POSSO FAZER UM POST ÚNICO DE UMA TASK(VERIFICAR MELHOR ESTE CASO)
-
-  useEffect(() => {
-    fetch('https://api.npoint.io/21c80c25ed65b6f3484f')
-      .then(response => response.json())
-      .then(json => {
-        setCompleted(json.filter((task: Task) => task.completed));
-        setIncomplete(json.filter((task: Task) => !task.completed));
-      });
-  }, []);
+  const {
+    handleDragEnd,
+    isLoading,
+    backlog,
+    doing,
+    development,
+    developed,
+    handleOpenModalForView,
+    setIsModal,
+    isModal,
+    data,
+    mutate,
+    isMode,
+    setIsMode,
+    taskSelected,
+    setTaskSelected
+  } = useBoard();
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <h2 style={{ textAlign: 'center' }}>PROGRESS BOARD</h2>
+    <S.Container>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <S.Header>
+          <Image src={LogoRecrutei} />
+          <S.TitleHeader>Teste vaga front</S.TitleHeader>
+        </S.Header>
+        <S.SectionButton>
+          <S.Button onClick={() => setIsModal(true)}>
+            <span>Adicionar tarefa</span>
+          </S.Button>
+        </S.SectionButton>
 
-      <S.Container>
-        <Column title={'IDEIAS'} tasks={incomplete} id={'1'} />
-        <Column title={'A FAZER'} tasks={completed} id={'2'} />
-        <Column title={'FAZENDO'} tasks={inReview} id={'3'} />
-        <Column title={'FEITO'} tasks={backlog} id={'4'} />
-      </S.Container>
-    </DragDropContext>
+        <S.SectionPagination>
+          <S.Pagination style={{ backgroundColor: '#adb8cb83' }}>
+            <LeftOutlined />
+          </S.Pagination>
+
+          <S.Pagination>
+            <RightOutlined />
+          </S.Pagination>
+        </S.SectionPagination>
+
+        {isLoading ? (
+          <S.SpinContainer>
+            <Spin indicator={<LoadingOutlined style={{ fontSize: 58 }} spin />} />
+          </S.SpinContainer>
+        ) : (
+          <S.Content>
+            <Column
+              title={'Ideias'}
+              tasks={backlog}
+              id="1"
+              handleOpenModalForView={handleOpenModalForView}
+            />
+            <Column
+              title={'A fazer'}
+              tasks={doing}
+              id="2"
+              handleOpenModalForView={handleOpenModalForView}
+            />
+            <Column
+              title={'Fazendo'}
+              tasks={development}
+              id="3"
+              handleOpenModalForView={handleOpenModalForView}
+            />
+            <Column
+              title={'Feito'}
+              tasks={developed}
+              id="4"
+              handleOpenModalForView={handleOpenModalForView}
+            />
+          </S.Content>
+        )}
+      </DragDropContext>
+
+      <Form
+        isModal={isModal}
+        setIsModal={setIsModal}
+        data={data}
+        mutate={mutate}
+        setIsMode={setIsMode}
+        isMode={isMode}
+        taskSelected={taskSelected}
+        setTaskSelected={setTaskSelected}
+      />
+    </S.Container>
   );
 };
 

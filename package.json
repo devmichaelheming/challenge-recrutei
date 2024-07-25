@@ -11,14 +11,17 @@
     "eslint:fix": "eslint --ext .ts,.tsx --quiet --fix src"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.4.0",
     "antd": "4.23.5",
     "axios": "^0.27.2",
+    "moment": "^2.30.1",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "17.0.2",
     "styled-components": "5.2.1",
-    "zustand": "^4.3.6"
+    "swr": "^2.2.5",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",
@@ -29,6 +32,7 @@
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "5.1.11",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "babel-plugin-import": "^1.13.3",

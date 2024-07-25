@@ -1,51 +1,41 @@
-<h1 align="center">Template NextJs</h1>
+# Desafio Técnico | Recrutei
 
-## 💻 Projeto
+Este projeto foi desenvolvido como parte de um teste técnico para a vaga de Desenvolvedor Front-end React Pleno na Recrutei. A aplicação simula um sistema de gestão de tarefas no estilo Kanban, semelhante ao Trello.
 
-Template NextJs com **dependências** pré-configuradas a fim de reduzir o trabalho na configuração de novos projetos.
+## Funcionalidades Implementadas
 
-- [Styled-componentes](https://styled-components.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Axios](https://axios-http.com/ptbr/docs/intro)
-- [Swr](https://swr.vercel.app/)
-- [Jest](https://jestjs.io/pt-BR/)
+#### Tela de Listagem de Investimentos:
 
-Também foi adicionado as ferramentas [**ESLint**](https://eslint.org/) e [**Prettier**](https://prettier.io/) para aumentar a produtividade e auxiliar a manter um padrão de código.
+- Visualização das Tarefas: A aplicação exibe as tarefas agrupadas por etapas pré-definidas: Ideias, A Fazer, Fazendo, Feito.
+- Drag and Drop: Os cards (representando as tarefas) podem ser movidos entre as colunas através de drag and drop.
+- Scroll Horizontal: Para telas menores, a aplicação permite a rolagem horizontal das colunas.
+- Criação de Tarefas: Um botão "Criar Tarefa" abre uma modal com um formulário para cadastrar uma nova tarefa.
+- Validação de Formulário: O formulário de criação de tarefas valida os campos antes de permitir a criação da tarefa.
+- Visualização de Tarefa: Ao clicar em um card, uma modal é aberta mostrando os detalhes da tarefa.
 
-## 📥 Instalação e execução
+## Tecnologias Utilizadas
+#### Este projeto foi desenvolvido utilizando o ReactJs/Next - Typescript
 
-Faça um clone desse repositório e acesse o diretório.
+- Styled-components: Biblioteca para estilização de componentes.
+- React Beautiful DnD: Biblioteca para implementação de drag and drop
+- Ant Design: Biblioteca de componentes
+- SWR: Biblioteca para fetching de dados
+- Axios: Biblioteca para a integração com a api.
+- Moment.js: Biblioteca para manipulação de datas.
+- UUID: Biblioteca para geração de identificadores únicos.
 
-```bash
-# Instalando as dependências
-$ yarn
+## Instalação.
 
-# Executanto aplicação
-$ yarn next
-```
+Clone o repositório
 
-## 🤝 Contribuir.
+● git clone https://github.com/devmichaelheming/challenge-recrutei
 
-Faça o `fork` e clone o projeto a partir do seu usuário.
+Instale as dependências
 
-```bash
-# Clonando projeto
-$ git clone https://github.com/SEU-NOME-DE-USUARIO/nextjs_template.git
+    Npm install ou yarn install
 
-# Criando um branch
-$ git branch minha-alteracao
+## Execução.
 
-# Acessando o novo branch
-$ git checkout -b minha-alteracao
+Após clonar o projeto e instalar as dependências, abra o mesmo em seu terminal e execute o seguinte comando:
 
-# Adicionando os arquivos alterados
-$ git add .
-
-# Criando commit e a mensagem
-$ git commit -m "Corrigindo...."
-
-# Enviando alterações para o brach
-$ git push origin minha-alteracao
-```
-
-Você deve navegar até o seu repositório onde fez o fork e clicar no botão _New pull request_ no lado esquerdo da página.
+    npm run dev ou yarn dev

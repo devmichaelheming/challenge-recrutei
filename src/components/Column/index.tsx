@@ -1,22 +1,18 @@
-import { ColumnProps } from '~/types';
 import React, { FC, ReactElement } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 
 import Card from '../Card';
 import S from './styles';
+import { ColumnProps } from './types';
 
-const Column: FC<ColumnProps> = ({ title, tasks, id }): ReactElement => {
+const Column: FC<ColumnProps> = ({ title, tasks, id, handleOpenModalForView }): ReactElement => {
   return (
     <S.Container className="column">
-      <S.Title
-        style={{
-          backgroundColor: 'lightblue',
-          position: 'sticky',
-          top: '0'
-        }}
-      >
-        {title}
-      </S.Title>
+      <S.Title>{title}</S.Title>
+      <S.SubTitle>
+        {`${tasks.length > 1 ? `${tasks.length} tarefas` : `${tasks.length} tarefa`}`}
+      </S.SubTitle>
+
       <Droppable droppableId={id}>
         {(provided, snapshot) => (
           <S.TaskList
@@ -25,7 +21,12 @@ const Column: FC<ColumnProps> = ({ title, tasks, id }): ReactElement => {
             isDraggingOver={snapshot.isDraggingOver}
           >
             {tasks.map((task, index) => (
-              <Card key={index} index={index} task={task} />
+              <Card
+                key={index}
+                index={index}
+                task={task}
+                handleOpenModalForView={handleOpenModalForView}
+              />
             ))}
             {provided.placeholder}
           </S.TaskList>

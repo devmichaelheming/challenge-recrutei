@@ -1,15 +1,17 @@
-import { Task } from '~/types';
+import BookmarkIcon from '~/assets/images/bookmark.svg';
+import { truncateDescription } from '~/lib/utils/functions';
+import moment from 'moment';
+import Image from 'next/image';
 import React, { FC, ReactElement } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
 import S from './styles';
+import { CardProps } from './types';
+import { useCard } from './useCard';
 
-interface CardProps {
-  task: Task;
-  index: number;
-}
+const Card: FC<CardProps> = ({ task, index, handleOpenModalForView }): ReactElement => {
+  const { daysLeft } = useCard({ task });
 
-const Card: FC<CardProps> = ({ task, index }): ReactElement => {
   return (
     <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
       {(provided, snapshot) => (
@@ -18,26 +20,29 @@ const Card: FC<CardProps> = ({ task, index }): ReactElement => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
+          isDeveloped={task.status === 'developed'}
+          onClick={() => handleOpenModalForView(task)}
         >
-          <div style={{ display: 'flex', justifyContent: 'start', padding: 2 }}>
-            <span>
-              <small>#{task.id}</small>
-            </span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
-            <S.TextContent>{task.title}</S.TextContent>
-          </div>
-          <S.Icons>
-            <div>
-              {/* <Avatar
-                onClick={() => console.log(task)}
-                src={'https://joesch.moe/api/v1/random?key=' + task.id}
-              /> */}
-              avatar
-            </div>
-          </S.Icons>
-          {/* {provided.placeholder} */}
-          place
+          {task.status === 'developed' && (
+            <S.SectionBookmark>
+              <Image src={BookmarkIcon} />
+            </S.SectionBookmark>
+          )}
+
+          <S.Title>{task.title}</S.Title>
+
+          <S.Description>{truncateDescription(task.description, 100)}</S.Description>
+
+          <S.SectionDate daysLeft={daysLeft.value}>
+            <span>Data limite: {moment(task.date).format('DD/MM')}</span>
+            <span>{daysLeft.label}</span>
+          </S.SectionDate>
+
+          <S.SectionResponsible>
+            {task.responsible.map(item => (
+              <S.Responsible key={item}>{item}</S.Responsible>
+            ))}
+          </S.SectionResponsible>
         </S.Container>
       )}
     </Draggable>
